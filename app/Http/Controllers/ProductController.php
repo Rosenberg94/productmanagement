@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GoodsExports;
+use App\Exports\ProductsExport;
+use App\Models\Manufacturer;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 use App\Imports\ProductsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
+use phpDocumentor\Reflection\Types\Nullable;
+
 
 class ProductController extends Controller
 {
@@ -29,10 +34,16 @@ class ProductController extends Controller
         $request->validate([
             'name' => ['bail', 'required', 'string', 'max:255'],
             'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:255'],
+            'amount' => ['bail', 'integer', 'max:2555555'],
             'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:8'],
+            'manufacturer_id' => ['bail', 'integer', 'max:10000'],
         ]);
+
+        $file = $request->file('image');
+        if($file){
+            $input['image'] = $request->file('image')->store(
+                'images', 'public');
+        }
         $product = new Product();
         $product->fill($input);
         $product->save();
@@ -53,15 +64,26 @@ class ProductController extends Controller
         $request->validate([
             'name' => ['bail', 'required', 'string', 'max:255'],
             'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:255'],
+            'amount' => ['bail', 'integer', 'max:255255'],
             'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:8'],
+            'manufacturer_id' => ['bail', 'integer', 'max:1000'],
         ]);
+
+        $file = $request->file('image');
+        if($file){
+            $input['image'] = $request->file('image')->store(
+                'images', 'public');
+        }
         $product = Product::find($request->id);
         $product->update($input);
         $product->save();
 
         return redirect(route('list'))->with('success','You successfully updated product!');
+    }
+
+    public function manage()
+    {
+        return view('product.manage');
     }
 
     public function import()
@@ -71,20 +93,22 @@ class ProductController extends Controller
         return redirect('/')->with('success', 'All good!');
     }
 
+    public function exportExcel()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
+    }
+
     public function show()
     {
         return view('product.import');
     }
 
-
     public function storeExcel(Request $request)
     {
-
        $file = $request->file('file');
        Excel::import(new ProductsImport, $file);
 
-       return back()->with('success','You successfully created Your certificate!');
+       return redirect('/')->with('success','You successfully created Your certificate!');
     }
-
 
 }

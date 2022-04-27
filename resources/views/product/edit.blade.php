@@ -9,7 +9,7 @@
                         <h3>Edit product</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route("edit") }}" method="post">
+                        <form action="{{ route("update") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input name="id" type="text" value="{{$product->id}}" hidden />
                             <div class="form-group row">
@@ -69,6 +69,13 @@
                                 <div class="col-md-7">
                                     <input id="manufacturer_id" class="form-control" type="text" name="manufacturer_id" value="{{$product->manufacturer_id}}"
                                            required/>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group row">
+                                <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+                                <div class="col-md-7">
+                                    <input id="image" name="image" type="file" class="form-control" value="{{asset('storage/' . $product->image)}}">
                                 </div>
                             </div>
                             <br>

@@ -9,7 +9,7 @@
                         <h3>Edit manufacturer</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route("manufacturer_edit") }}" method="post">
+                        <form action="{{ route("manufacturer_update") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input name="id" type="text" value="{{$manufacturer->id}}" hidden />
                             <div class="form-group row">
