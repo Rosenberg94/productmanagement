@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manufacturer;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ManufacturerController extends Controller
@@ -52,5 +53,13 @@ class ManufacturerController extends Controller
         $manufacturer->save();
 
         return redirect(route('manufacturer_list'))->with('success','You successfully updated manufacturer!');
+    }
+
+    public function products(Request $request)
+    {
+        $products = $request->id ? Product::where('manufacturer_id', $request->id)->simplePaginate(20) : [];
+        $manufacturers = Manufacturer::all();
+
+        return view('product.list', compact('products', 'manufacturers'));
     }
 }

@@ -33,6 +33,9 @@
                     {{$manufacturer->country}}
                 </td>
                 <td>
+                    <a href="{{route('manufacturer_products', ["id" => $manufacturer->id])}}" class="btn btn-warning">All manufacturer products</a>
+                </td>
+                <td>
                     <a href="{{route('manufacturer_edit', ['manufacturer_id' => $manufacturer->id])}}" class="btn btn-warning">Edit</a>
                 </td>
             </tr>

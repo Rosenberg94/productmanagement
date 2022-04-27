@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,14 @@ class MainController extends Controller
     public function foo()
     {
         echo 'foo';
-        $prods = Product::paginate(2);
-        dump($prods);
-        dump($prods['currentPage']);
-        dump($prods->currentPage());
-        dump($prods->lastPage());
-        dump($prods->items());
+
+        $categories = Category::where('parent', null)->get()->map(function($item){
+            return [
+                'name' => $item->name,
+            ];
+        });
+
+       dump($categories);
     }
 
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnManufacturerIdToProductsTable extends Migration
+class CreateProductCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class AddColumnManufacturerIdToProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('manufacturer_id')->after('price')->nullable();
-            $table->float('amount')->after('statement')->nullable();
-
+        Schema::create('product_category', function (Blueprint $table) {
+            $table->id();
+            $table->integer('product_id');
+            $table->integer('category_id');
+            $table->timestamps();
         });
     }
 
@@ -27,8 +28,6 @@ class AddColumnManufacturerIdToProductsTable extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('product_category');
     }
 }

@@ -19,7 +19,6 @@ class ProductsImport implements ToModel
      */
     public function model(array $row)
     {
-//        dd($row);
          return new Product([
             'name'     => $row[0],
             'code'    => $row[1],
@@ -28,13 +27,5 @@ class ProductsImport implements ToModel
             'price' => $row[4],
             'manufacturer_id' => $row[5],
         ]);
-
-//        $prod = new Product();
-//        $prod->fill($data);
-//        $prod->save();
-//        dd($prod);
-
-
-
     }
 }
