@@ -13,4 +13,6 @@ class Manufacturer extends Model
         'name',
         'country',
     ];
+
+    protected $table = 'manufacturers';
 }

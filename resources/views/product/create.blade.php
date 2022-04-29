@@ -56,8 +56,11 @@
                             <div class="form-group row">
                                 <label for="manufacturer_id" class="col-md-4 col-form-label text-md-right">manufacturer_id</label>
                                 <div class="col-md-7">
-                                    <input id="manufacturer_id" class="form-control" type="text" name="manufacturer_id"
-                                           placeholder="manufacturer_id"/>
+                                    <select class="form-control" id="manufacturer_id" name="manufacturer_id">
+                                        @foreach($manufacturers as $manufacturer)
+                                            <option value="{{$manufacturer->id}}">{{$manufacturer->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <br>

@@ -25,5 +25,4 @@ class MainController extends Controller
 
        dump($categories);
     }
-
 }

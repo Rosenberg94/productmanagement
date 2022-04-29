@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $data = $request->except("_token");
         $category = new Category();
-        $category->parent_id = $data['parent_id'];
+        $category->parent = $data['parent'];
         $category->name = $data['name'];
         $category->save();
 

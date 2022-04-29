@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\GoodsExports;
 use App\Exports\ProductsExport;
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -25,20 +26,14 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('product.create');
+        $manufacturers = Manufacturer::all();
+
+        return view('product.create', ['manufacturers' => $manufacturers]);
     }
 
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
         $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:2555555'],
-            'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:10000'],
-        ]);
-
         $file = $request->file('image');
         if($file){
             $input['image'] = $request->file('image')->store(
@@ -48,7 +43,7 @@ class ProductController extends Controller
         $product->fill($input);
         $product->save();
 
-        return redirect(route('main'))->with('success','You succesfully added new product!');
+        return redirect(route('main'))->with('success','You successfully added new product!');
     }
 
     public function edit(Request $request)
