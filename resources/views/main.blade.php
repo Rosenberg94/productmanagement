@@ -46,23 +46,23 @@
                     {{$product->price}}
                 </td>
                 <td>
-                    <h6 align="right" class="text-muted cat-color" >{{$product->manufacturer['name']}}</h6>
+                    <h6 class="text-muted cat-color" >{{$product->manufacturer['name']}}</h6>
                 </td>
                 <td>
                     <a href="{{route('main', ["category_id" => $product->category_id])}}">
-                        <h6 align="right" class="text-muted cat-color" >{{$product->category['name']}}</h6>
+                        <h6 class="text-muted cat-color" >{{$product->category['name']}}</h6>
                     </a>
                 </td>
                 <td>
                     @if($product->image)
-                        <img src="{{asset('storage/' . $product->image)}}" style="width:50px; height:50px" alt="">
+                        <img src="{{asset('storage/' . $product->image)}}" style="width:50px; height:50px" class="img-fluid rounded-start img-article" alt="">
                     @else
                         <img src="{{asset('storage/images/default.jpg')}}" style="width:50px; height:50px" class="img-fluid rounded-start img-article" alt="...">
                     @endif
                 </td>
                 @auth()
                 <td>
-                    <a href="{{route('edit', ['product_id' => $product->id])}}" class="btn btn-warning">Edit</a>
+                    <a href="{{route('edit', ['product_id' => $product->id])}}" class="btn btn-warning btn-clr">Edit</a>
                 </td>
                 @endauth
             </tr>
