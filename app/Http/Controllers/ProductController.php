@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Exports\GoodsExports;
 use App\Exports\ProductsExport;
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 use App\Imports\ProductsImport;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\Types\Nullable;
@@ -25,20 +29,15 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('product.create');
+        $manufacturers = Manufacturer::all();
+        $categories = Category::all();
+
+        return view('product.create', ['manufacturers' => $manufacturers, 'categories' => $categories]);
     }
 
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
         $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:2555555'],
-            'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:10000'],
-        ]);
-
         $file = $request->file('image');
         if($file){
             $input['image'] = $request->file('image')->store(
@@ -48,7 +47,7 @@ class ProductController extends Controller
         $product->fill($input);
         $product->save();
 
-        return redirect(route('main'))->with('success','You succesfully added new product!');
+        return redirect(route('main'))->with('success','You successfully added new product!');
     }
 
     public function edit(Request $request)
@@ -58,27 +57,24 @@ class ProductController extends Controller
         return view('product.edit', ['product' => $product]);
     }
 
-    public function update(Request $request)
+    public function update(ProductUpdateRequest $request)
     {
-        $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:255255'],
-            'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:1000'],
-        ]);
-
-        $file = $request->file('image');
-        if($file){
-            $input['image'] = $request->file('image')->store(
-                'images', 'public');
-        }
         $product = Product::find($request->id);
-        $product->update($input);
-        $product->save();
+        $input = $request->except("_token");
 
-        return redirect(route('list'))->with('success','You successfully updated product!');
+        if ($product){
+            $file = $request->file('image');
+            if($file){
+                $this->__productImageDestroy($request);
+                $input['image'] = $request->file('image')->store(
+                    'images', 'public');
+            }
+            $product->update($input);
+
+            return redirect(route('list'))->with('success', 'Product has been successfully updated!');
+        }
+
+        return redirect(route('list'))->with('success','Product isn\'t isset!');
     }
 
     public function manage()
@@ -109,6 +105,16 @@ class ProductController extends Controller
        Excel::import(new ProductsImport, $file);
 
        return redirect('/')->with('success','You successfully created Your certificate!');
+    }
+
+    private function __productImageDestroy($request)
+    {
+        $product = Product::find($request->product);
+        if (isset($product->image)){
+            if(Storage::disk('public')->exists($product->image)){
+                Storage::delete($product->image);
+            }
+        }
     }
 
 }

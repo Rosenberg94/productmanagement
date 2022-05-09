@@ -19,7 +19,8 @@ class CreateProductsTable extends Migration
             $table->string('code');
             $table->boolean('statement')->default(true);
             $table->float('price', 8, 2 )->nullable();
-            $table->foreignId('manufacturer_id')->constrained('manufacturers');
+            $table->foreignId('manufacturer_id')->nullable()->constrained('manufacturers');
+            $table->integer('category_id')->default(1);
             $table->float('amount')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

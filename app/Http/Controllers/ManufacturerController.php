@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ManufacturerStoreRequest;
+use App\Http\Requests\ManufacturerUpdateRequest;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ManufacturerController extends Controller
 {
@@ -20,19 +23,22 @@ class ManufacturerController extends Controller
         return view('manufacturer.list', ['manufacturers' => $manufacturers], compact('manufacturers'));
     }
 
-    public function store(Request $request)
+
+    public function store(ManufacturerStoreRequest $request)
     {
         $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'country' => ['bail', 'required', 'string', 'max:28'],
-        ]);
+        $file = $request->file('image');
+        if($file){
+            $input['image'] = $request->file('image')->store(
+                'images', 'public');
+        }
         $manufacturer = new Manufacturer();
         $manufacturer->fill($input);
         $manufacturer->save();
 
         return redirect(route('main'))->with('success','You succesfully added new manufacturer!');
     }
+
 
     public function edit(Request $request)
     {
@@ -41,19 +47,27 @@ class ManufacturerController extends Controller
         return view('manufacturer.edit', ['manufacturer' => $manufacturer]);
     }
 
-    public function update(Request $request)
-    {
-        $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'country' => ['bail', 'required', 'string', 'max:28'],
-        ]);
-        $manufacturer = Manufacturer::find($request->id);
-        $manufacturer->update($input);
-        $manufacturer->save();
 
-        return redirect(route('manufacturer_list'))->with('success','You successfully updated manufacturer!');
+    public function update(ManufacturerUpdateRequest $request)
+    {
+        $manufacturer = Manufacturer::find($request->id);
+        $input = $request->except("_token");
+
+        if ($manufacturer){
+            $file = $request->file('image');
+            if($file){
+                $this->__manufacturerImageDestroy($request);
+                $input['image'] = $request->file('image')->store(
+                    'images', 'public');
+            }
+            $manufacturer->update($input);
+
+            return redirect(route('manufacturer_list'))->with('success', 'Manufacturer has been successfully updated!');
+        }
+
+        return redirect(route('manufacturer_list'))->with('success','Manufacturer isn\'t isset!');
     }
+
 
     public function products(Request $request)
     {
@@ -61,5 +75,16 @@ class ManufacturerController extends Controller
         $manufacturers = Manufacturer::all();
 
         return view('product.list', compact('products', 'manufacturers'));
+    }
+
+
+    private function __manufacturerImageDestroy($request)
+    {
+        $manufacturer = Manufacturer::find($request->product);
+        if (isset($manufacturer->image)){
+            if(Storage::disk('public')->exists($manufacturer->image)){
+                Storage::delete($manufacturer->image);
+            }
+        }
     }
 }

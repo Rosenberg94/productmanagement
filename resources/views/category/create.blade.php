@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
     <div class="container">
         <h2>create category</h2>
@@ -6,7 +7,7 @@
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Parent id</label>
-                <input type="text" class="form-control" id="parent_id" name="parent_id" placeholder="parent_id">
+                <input type="text" class="form-control" id="parent" name="parent" placeholder="parent">
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">name</label>

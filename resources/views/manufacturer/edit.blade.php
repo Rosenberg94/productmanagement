@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
     <div class="cotainer">
@@ -19,16 +20,20 @@
                                            value="{{$manufacturer->name}}"/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="country" class="col-md-4 col-form-label text-md-right">Country</label>
                                 <div class="col-md-7">
                                     <input id="country" class="form-control" type="text" name="country"
                                            value="{{$manufacturer->country}}"/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
+                                <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+                                <div class="col-md-7">
+                                    <input id="image" name="image" type="file" class="form-control" value="{{asset('storage/' . $manufacturer->image)}}">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-7">
                                     <button class="btn btn-primary" type="submit">Update</button>
