@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
     <div class="cotainer">
@@ -9,7 +10,7 @@
                         <h3>Add manufacturer</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route("manufacturer_store") }}" method="post">
+                        <form action="{{ route("manufacturer_store") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
@@ -18,7 +19,7 @@
                                            placeholder="name of manufacturer"/>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="country" class="col-md-4 col-form-label text-md-right">Country</label>
                                 <div class="col-md-7">
@@ -26,7 +27,13 @@
                                            placeholder="country"/>
                                 </div>
                             </div>
-                            <br>
+
+                            <div class="form-group row">
+                                <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+                                <div class="col-md-7">
+                                    <input id="image" name="image" type="file" class="form-control" >
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-7">

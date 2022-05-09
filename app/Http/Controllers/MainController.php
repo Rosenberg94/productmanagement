@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('main');
+        $category_id = $request->category_id;
+
+        if($category_id){
+            $products = Product::where('category_id', $category_id)->orderByDesc('created_at')->simplePaginate(10);
+        } else {
+            $products = Product::orderByDesc('created_at')->simplePaginate(10);
+        }
+        $categories = Category::all();
+
+        return view('main', ['products' => $products, 'categories' => $categories]);
     }
+
 
     public function foo()
     {

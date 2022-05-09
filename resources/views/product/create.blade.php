@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
     <div class="cotainer">
@@ -12,13 +13,25 @@
                         <form action="{{ route("store") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for="category_id" class="form-label">Category</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select class="form-select" name="category_id" aria-label="Category choose">
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                 <div class="col-md-7">
                                     <input name="name" id="name" class="form-control" type="text"
                                            placeholder="name of product"/>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="code" class="col-md-4 col-form-label text-md-right">Code</label>
                                 <div class="col-md-7">
@@ -26,7 +39,7 @@
                                            placeholder="code"/>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="statement" class="col-md-4 col-form-label text-md-right">Pcs or kg</label>
                                 <div class="col-md-7">
@@ -36,7 +49,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="amount" class="col-md-4 col-form-label text-md-right">Amount</label>
                                 <div class="col-md-7">
@@ -44,7 +57,7 @@
                                            placeholder="amount"/>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="price" class="col-md-4 col-form-label text-md-right">Price</label>
                                 <div class="col-md-7">
@@ -52,7 +65,7 @@
                                            required/>
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <label for="manufacturer_id" class="col-md-4 col-form-label text-md-right">manufacturer_id</label>
                                 <div class="col-md-7">
@@ -70,7 +83,7 @@
                                     <input id="image" name="image" type="file" class="form-control" >
                                 </div>
                             </div>
-                            <br>
+
                             <div class="form-group row">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-7">

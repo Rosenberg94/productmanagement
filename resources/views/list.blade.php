@@ -1,9 +1,7 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
-    <div class="col-md-12 text-center">
-        <a class="btn btn-primary" href="{{route('main')}}">Main page</a>
-    </div>
 
 @if (count($products) == 0)
     <h3 class="text-center">no products</h3>
