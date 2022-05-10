@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 bg-grey mt-2">
-            <h2 class="text-center">Categories list</h2>
+            <h2 class="text-center mt-3 mb-3">Categories list</h2>
             @foreach($categories as $category)
                 <div class="dropdown">
                     <button class="btn btn-clr dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

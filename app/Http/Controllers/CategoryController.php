@@ -33,8 +33,7 @@ class CategoryController extends Controller
 
     public function edit(Request $request)
     {
-        $category_id = $request->id;
-        $category = Category::find($category_id);
+        $category = Category::find($request->id);
 
         return view('category.edit', ['category' => $category]);
     }

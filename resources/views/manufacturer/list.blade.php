@@ -14,8 +14,8 @@
             <th scope="col">id</th>
             <th scope="col">Name</th>
             <th scope="col">Country</th>
-            <th scope="col">Products</th>
             <th scope="col">Photo</th>
+            <th scope="col">Products</th>
             <th scope="col">Edit</th>
         </tr>
         </thead>
@@ -32,12 +32,12 @@
                     {{$manufacturer->country}}
                 </td>
                 <td>
-                    <a href="{{route('manufacturer_products', ["id" => $manufacturer->id])}}" class="btn btn-success">All manufacturer products</a>
-                </td>
-                <td>
                     @if($manufacturer->image)
                         <img src="{{asset('storage/' . $manufacturer->image)}}" style="width:50px; height:50px" alt="">
                     @endif
+                </td>
+                <td>
+                    <a href="{{route('manufacturer_products', ["id" => $manufacturer->id])}}" class="btn btn-success">All manufacturer products</a>
                 </td>
                 <td>
                     <a href="{{route('manufacturer_edit', ['manufacturer_id' => $manufacturer->id])}}" class="btn btn-warning">Edit</a>

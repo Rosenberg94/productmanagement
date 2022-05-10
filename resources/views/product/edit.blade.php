@@ -13,21 +13,21 @@
                         <form action="{{ route("update") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input name="id" type="text" value="{{$product->id}}" hidden />
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                 <div class="col-md-7">
                                     <input name="name" id="name" class="form-control" type="text"
                                            value="{{$product->name}}"/>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="code" class="col-md-4 col-form-label text-md-right">Code</label>
                                 <div class="col-md-7">
                                     <input id="code" class="form-control" type="text" name="code"
                                            value="{{$product->code}}"/>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="statement" class="col-md-4 col-form-label text-md-right">Pcs or kg</label>
                                 <div class="col-md-7">
                                     <select id="statement" class="form-control" name="statement"  aria-label="Default select example">
@@ -46,6 +46,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-group row mt-3">
                                 <label for="amount" class="col-md-4 col-form-label text-md-right">Amount</label>
                                 <div class="col-md-7">
@@ -53,13 +54,15 @@
                                            required/>
                                 </div>
                             </div>
-                            <div class="form-group  mt-3">
+
+                            <div class="form-group row mt-3">
                                 <label for="price" class="col-md-4 col-form-label text-md-right">Price</label>
                                 <div class="col-md-7">
                                     <input id="price" class="form-control" type="text" name="price" value="{{$product->price}}"
                                            required/>
                                 </div>
                             </div>
+
                             <div class="form-group row mt-3">
                                 <label for="manufacturer_id" class="col-md-4 col-form-label text-md-right">manufacturer_id</label>
                                 <div class="col-md-7">

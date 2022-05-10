@@ -32,20 +32,20 @@ Route::get('/foo', [MainController::class, 'foo'])->name('foo');
 Route::get('/list', [ProductController::class, 'list'])->name('list');
 
 
-
 Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'product'], function () {
         Route::get('/create', [ProductController::class, 'create'])->name('create');
         Route::post('/store', [ProductController::class, 'store'])->name('store');
         Route::get('/edit', [ProductController::class, 'edit'])->name('edit');
         Route::post('/edit', [ProductController::class, 'update'])->name('update');
+        Route::post('/delete', [ProductController::class, 'delete'])->name('delete');
     });
 
     Route::group(['prefix' => 'manufacturer'], function () {
         Route::get('/create', [ManufacturerController::class, 'create'])->name('manufacturer_create');
         Route::post('/store', [ManufacturerController::class, 'store'])->name('manufacturer_store');
-        Route::get('/edit', [ManufacturerController::class, 'edit'])->name('manufacturer_edit');
-        Route::post('/edit', [ManufacturerController::class, 'update'])->name('manufacturer_update');
+        Route::get('/edit', [ManufacturerController::class, 'edit'])->middleware('check.user.role')->name('manufacturer_edit');
+        Route::post('/edit', [ManufacturerController::class, 'update'])->middleware('check.user.role')->name('manufacturer_update');
         Route::get('/list', [ManufacturerController::class, 'list'])->name('manufacturer_list');
         Route::get('/products', [ManufacturerController::class, 'products'])->name('manufacturer_products');
     });
@@ -61,9 +61,9 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('/', [CategoryController::class, 'allCategories'])->name('categories');
         Route::get('/create', [CategoryController::class, 'create'])->name('category_create_form');
         Route::post('/create', [CategoryController::class, 'update'])->name('category_create');
-        Route::get('/edit', [CategoryController::class, 'edit'])->name('category_edit_form');
-        Route::post('/edit', [CategoryController::class, 'store'])->name('category_edit');
-        Route::post('/delete', [CategoryController::class, 'destroy'])->name('category_delete');
+        Route::get('/edit', [CategoryController::class, 'edit'])->middleware('check.user.role')->name('category_edit_form');
+        Route::post('/edit', [CategoryController::class, 'store'])->middleware('check.user.role')->name('category_edit');
+        Route::post('/delete', [CategoryController::class, 'destroy'])->middleware('check.user.role')->name('category_delete');
     });
 
 });
