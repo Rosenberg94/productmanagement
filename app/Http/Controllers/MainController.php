@@ -10,12 +10,10 @@ class MainController extends Controller
 {
     public function index(Request $request)
     {
-        $category_id = $request->category_id;
-
-        if($category_id){
-            $products = Product::where('category_id', $category_id)->orderByDesc('created_at')->simplePaginate(10);
+        if($request->category_id){
+            $products = Product::where('category_id', $request->category_id)->orderByDesc('created_at')->paginate(20);
         } else {
-            $products = Product::orderByDesc('created_at')->simplePaginate(10);
+            $products = Product::orderByDesc('id')->paginate(20);
         }
         $categories = Category::all();
 

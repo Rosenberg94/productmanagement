@@ -49,6 +49,13 @@
                         </ul>
                     </div>
                 @endisset
+                @auth()
+                    <div class="mt-2">
+{{--                        <a href="{{ route( 'profile')}}" class="non-dcr">--}}
+                            <h6 class="txt-clr">{{auth()->user()->name}}</h6>
+{{--                        </a>--}}
+                    </div>
+                @endauth
             </ul>
             <div class="d-flex">
                 <div class="container">

@@ -16,9 +16,10 @@ class ManufacturerController extends Controller
         return view('manufacturer.create');
     }
 
+
     public function list()
     {
-        $manufacturers = Manufacturer::simplePaginate(20);
+        $manufacturers = Manufacturer::orderByDesc('id')->paginate(2);
 
         return view('manufacturer.list', ['manufacturers' => $manufacturers], compact('manufacturers'));
     }
@@ -52,7 +53,6 @@ class ManufacturerController extends Controller
     {
         $manufacturer = Manufacturer::find($request->id);
         $input = $request->except("_token");
-
         if ($manufacturer){
             $file = $request->file('image');
             if($file){
