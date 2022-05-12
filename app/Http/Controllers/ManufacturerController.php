@@ -19,7 +19,7 @@ class ManufacturerController extends Controller
 
     public function list()
     {
-        $manufacturers = Manufacturer::orderByDesc('id')->paginate(2);
+        $manufacturers = Manufacturer::orderBy('id')->paginate(10);
 
         return view('manufacturer.list', ['manufacturers' => $manufacturers], compact('manufacturers'));
     }

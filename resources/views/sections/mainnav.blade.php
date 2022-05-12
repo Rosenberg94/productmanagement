@@ -51,9 +51,9 @@
                 @endisset
                 @auth()
                     <div class="mt-2">
-{{--                        <a href="{{ route( 'profile')}}" class="non-dcr">--}}
+                        <a href="{{ route('profile')}}" class="non-dcr">
                             <h6 class="txt-clr">{{auth()->user()->name}}</h6>
-{{--                        </a>--}}
+                        </a>
                     </div>
                 @endauth
             </ul>
