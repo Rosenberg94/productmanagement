@@ -75,7 +75,7 @@
                 @auth()
 
                 <td>
-                    <a href="{{route('edit', ['product_id' => $product->id])}}" class="btn btn-warning btn-clr">Edit</a>
+                    <a href="{{route('edit', ['product_id' => $product->id])}}" class="btn btn-warning btn-clr btn-sm">Edit</a>
                 </td>
                 <td>
                     <form action="{{route('delete', ['product_id' => $product->id]) }}" method="POST">

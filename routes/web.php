@@ -32,6 +32,7 @@ Route::get('/foo', [MainController::class, 'foo'])->name('foo');
 Route::get('/list', [ProductController::class, 'list'])->name('list');
 
 
+
 Route::group(['middleware' =>'auth'], function() {
     Route::group(['prefix' => 'product'], function () {
         Route::get('/create', [ProductController::class, 'create'])->name('create');
@@ -39,6 +40,12 @@ Route::group(['middleware' =>'auth'], function() {
         Route::get('/edit', [ProductController::class, 'edit'])->name('edit');
         Route::post('/edit', [ProductController::class, 'update'])->name('update');
         Route::post('/delete', [ProductController::class, 'delete'])->name('delete');
+    });
+
+    Route::group(['prefix' => 'profile'], function() {
+        Route::get('/', '\App\Http\Controllers\UserController@show')->name('profile');
+        Route::get('/edit/{id}', '\App\Http\Controllers\UserController@edit')->name('profile_edit');
+        Route::post('/update', '\App\Http\Controllers\UserController@update')->name('profile_update');
     });
 
     Route::group(['prefix' => 'manufacturer'], function () {

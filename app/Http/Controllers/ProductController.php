@@ -6,12 +6,12 @@ use App\Exports\GoodsExports;
 use App\Exports\ProductsExport;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Traits\ProductTrait;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use App\Imports\ProductsImport;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,6 +21,8 @@ use phpDocumentor\Reflection\Types\Nullable;
 
 class ProductController extends Controller
 {
+    use ProductTrait;
+
     public function list(Request $request)
     {
         $category_id = $request->category_id;
@@ -29,9 +31,9 @@ class ProductController extends Controller
         if($manufacturer_id){
             $products = Product::where('manufacturer_id', $manufacturer_id)->orderByDesc('id')->paginate(20);
         } elseif ($category_id) {
-            $products = Product::where('category_id', $category_id)->orderByDesc('created_at')->paginate(20);
+            $products = Product::where('category_id', $category_id)->orderByDesc('id')->paginate(20);
         } else {
-            $products = Product::simplePaginate(20);
+            $products = Product::orderByDesc('id')->paginate(20);
         }
 
         return view('list', ['products' => $products], compact('products'));
@@ -49,15 +51,7 @@ class ProductController extends Controller
 
     public function store(ProductStoreRequest $request)
     {
-        $input = $request->except("_token");
-        $file = $request->file('image');
-        if($file){
-            $input['image'] = $request->file('image')->store(
-                'images', 'public');
-        }
-        $product = new Product();
-        $product->fill($input);
-        $product->save();
+        Product::create($this->getProductData($request));
 
         return redirect(route('main'))->with('success','You successfully added new product!');
     }
