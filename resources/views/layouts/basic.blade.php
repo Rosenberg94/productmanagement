@@ -13,7 +13,7 @@
 
     <title>Product Management</title>
 </head>
-<body>
+<body class="body-clr">
 <br>
 @if(session()->has('success'))
     <div class="alert alert-success">

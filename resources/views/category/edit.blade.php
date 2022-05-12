@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
     <div class="cotainer">

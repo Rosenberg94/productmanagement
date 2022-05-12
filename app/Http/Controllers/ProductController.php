@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Exports\GoodsExports;
 use App\Exports\ProductsExport;
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Traits\ProductTrait;
+use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
-
 use App\Imports\ProductsImport;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\Types\Nullable;
@@ -16,40 +21,41 @@ use phpDocumentor\Reflection\Types\Nullable;
 
 class ProductController extends Controller
 {
-    public function list()
+    use ProductTrait;
+
+    public function list(Request $request)
     {
-        $products = Product::simplePaginate(20);
+        $category_id = $request->category_id;
+        $manufacturer_id = $request->manufacturer_id;
+
+        if($manufacturer_id){
+            $products = Product::where('manufacturer_id', $manufacturer_id)->orderByDesc('id')->paginate(20);
+        } elseif ($category_id) {
+            $products = Product::where('category_id', $category_id)->orderByDesc('id')->paginate(20);
+        } else {
+            $products = Product::orderByDesc('id')->paginate(20);
+        }
 
         return view('list', ['products' => $products], compact('products'));
     }
 
+
     public function create()
     {
-        return view('product.create');
+        $manufacturers = Manufacturer::all();
+        $categories = Category::all();
+
+        return view('product.create', ['manufacturers' => $manufacturers, 'categories' => $categories]);
     }
 
-    public function store(Request $request)
+
+    public function store(ProductStoreRequest $request)
     {
-        $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:2555555'],
-            'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:10000'],
-        ]);
+        Product::create($this->getProductData($request));
 
-        $file = $request->file('image');
-        if($file){
-            $input['image'] = $request->file('image')->store(
-                'images', 'public');
-        }
-        $product = new Product();
-        $product->fill($input);
-        $product->save();
-
-        return redirect(route('main'))->with('success','You succesfully added new product!');
+        return redirect(route('main'))->with('success','You successfully added new product!');
     }
+
 
     public function edit(Request $request)
     {
@@ -58,33 +64,55 @@ class ProductController extends Controller
         return view('product.edit', ['product' => $product]);
     }
 
-    public function update(Request $request)
+
+    public function update(ProductUpdateRequest $request)
     {
-        $input = $request->except("_token");
-        $request->validate([
-            'name' => ['bail', 'required', 'string', 'max:255'],
-            'code' => ['bail', 'required', 'string', 'max:255'],
-            'amount' => ['bail', 'integer', 'max:255255'],
-            'price' => ['max:12'],
-            'manufacturer_id' => ['bail', 'integer', 'max:1000'],
-        ]);
-
-        $file = $request->file('image');
-        if($file){
-            $input['image'] = $request->file('image')->store(
-                'images', 'public');
-        }
         $product = Product::find($request->id);
-        $product->update($input);
-        $product->save();
+        $input = $request->except("_token");
+        if ($product){
+            $file = $request->file('image');
+            if($file){
+                $this->__productImageDestroy($request);
+                $input['image'] = $request->file('image')->store(
+                    'images', 'public');
+            }
+            $product->update($input);
 
-        return redirect(route('list'))->with('success','You successfully updated product!');
+            return redirect(route('main'))->with('success', 'Product has been successfully updated!');
+        }
+
+        return redirect(route('main'))->with('success','Product isn\'t isset!');
     }
+
+
+    public function delete(Request $request)
+    {
+        $product = Product::find($request->id);
+        if ($product){
+            if($this->__authUserCheck($product)){
+                $product->delete();
+
+                return redirect(route('main'))->with('success', 'Product has been successfully deleted!');
+            }
+            return back()->withErrors( 'You have no access for this action!');
+        }
+        return back()->withErrors( 'This product is not exist already!');
+    }
+
+
+    private function __authUserCheck($product)
+    {
+        $user = auth()->user();
+
+        return $user->role_id == User::ROLE_ADMIN;
+    }
+
 
     public function manage()
     {
         return view('product.manage');
     }
+
 
     public function import()
     {
@@ -93,15 +121,18 @@ class ProductController extends Controller
         return redirect('/')->with('success', 'All good!');
     }
 
+
     public function exportExcel()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
     }
 
+
     public function show()
     {
         return view('product.import');
     }
+
 
     public function storeExcel(Request $request)
     {
@@ -109,6 +140,17 @@ class ProductController extends Controller
        Excel::import(new ProductsImport, $file);
 
        return redirect('/')->with('success','You successfully created Your certificate!');
+    }
+
+
+    private function __productImageDestroy($request)
+    {
+        $product = Product::find($request->product);
+        if (isset($product->image)){
+            if(Storage::disk('public')->exists($product->image)){
+                Storage::delete($product->image);
+            }
+        }
     }
 
 }

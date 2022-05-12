@@ -16,7 +16,7 @@ class Product extends Model
         'amount',
         'price',
         'manufacturer_id',
-        'category',
+        'category_id',
         'image',
     ];
 
@@ -24,5 +24,9 @@ class Product extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function  manufacturer(){
+        return $this->belongsTo(Manufacturer::class);
     }
 }

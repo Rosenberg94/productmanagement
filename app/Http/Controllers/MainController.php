@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('main');
+        if($request->category_id){
+            $products = Product::where('category_id', $request->category_id)->orderByDesc('created_at')->paginate(20);
+        } else {
+            $products = Product::orderByDesc('id')->paginate(20);
+        }
+        $categories = Category::all();
+
+        return view('main', ['products' => $products, 'categories' => $categories]);
     }
+
 
     public function foo()
     {
@@ -25,5 +33,4 @@ class MainController extends Controller
 
        dump($categories);
     }
-
 }

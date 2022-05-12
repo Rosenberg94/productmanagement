@@ -12,5 +12,12 @@ class Manufacturer extends Model
     protected $fillable = [
         'name',
         'country',
+        'image',
     ];
+
+    protected $table = 'manufacturers';
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

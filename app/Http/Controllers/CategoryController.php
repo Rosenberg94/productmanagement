@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $data = $request->except("_token");
         $category = new Category();
-        $category->parent_id = $data['parent_id'];
+        $category->parent = $data['parent'];
         $category->name = $data['name'];
         $category->save();
 
@@ -33,8 +33,7 @@ class CategoryController extends Controller
 
     public function edit(Request $request)
     {
-        $category_id = $request->id;
-        $category = Category::find($category_id);
+        $category = Category::find($request->id);
 
         return view('category.edit', ['category' => $category]);
     }

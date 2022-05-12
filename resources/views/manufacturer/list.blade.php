@@ -1,9 +1,6 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
-
-    <div class="col-md-12 text-center">
-        <a class="btn btn-primary" href="{{route('main')}}">Main page</a>
-    </div>
 
     @if (count($manufacturers) == 0)
         <h3 class="text-center">no manufacturers</h3>
@@ -17,6 +14,8 @@
             <th scope="col">id</th>
             <th scope="col">Name</th>
             <th scope="col">Country</th>
+            <th scope="col">Photo</th>
+            <th scope="col">Products</th>
             <th scope="col">Edit</th>
         </tr>
         </thead>
@@ -24,19 +23,30 @@
         @foreach($manufacturers as $manufacturer)
             <tr>
                 <th>
-                    {{$manufacturer->id}}
+                    <h5>
+                        {{$manufacturer->id}}
+                    </h5>
                 </th>
                 <td>
-                    {{$manufacturer->name}}
+                    <h4>
+                        {{$manufacturer->name}}
+                    </h4>
                 </td>
                 <td>
-                    {{$manufacturer->country}}
+                    <h5>
+                        {{$manufacturer->country}}
+                    </h5>
                 </td>
                 <td>
-                    <a href="{{route('manufacturer_products', ["id" => $manufacturer->id])}}" class="btn btn-warning">All manufacturer products</a>
+                    @if($manufacturer->image)
+                        <img src="{{asset('storage/' . $manufacturer->image)}}" style="width:50px; height:50px" alt="">
+                    @endif
                 </td>
                 <td>
-                    <a href="{{route('manufacturer_edit', ['manufacturer_id' => $manufacturer->id])}}" class="btn btn-warning">Edit</a>
+                    <a href="{{route('manufacturer_products', ["id" => $manufacturer->id])}}" class="btn btn-success btn-sm">All manufacturer products</a>
+                </td>
+                <td>
+                    <a href="{{route('manufacturer_edit', ['manufacturer_id' => $manufacturer->id])}}" class="btn btn-warning btn-sm">Edit</a>
                 </td>
             </tr>
 

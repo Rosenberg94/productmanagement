@@ -1,4 +1,5 @@
 @extends('layouts.basic')
+@include('sections.mainnav')
 @section('content')
 
     <div class="cotainer">
@@ -12,23 +13,21 @@
                         <form action="{{ route("update") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input name="id" type="text" value="{{$product->id}}" hidden />
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                 <div class="col-md-7">
                                     <input name="name" id="name" class="form-control" type="text"
                                            value="{{$product->name}}"/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="code" class="col-md-4 col-form-label text-md-right">Code</label>
                                 <div class="col-md-7">
                                     <input id="code" class="form-control" type="text" name="code"
                                            value="{{$product->code}}"/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="statement" class="col-md-4 col-form-label text-md-right">Pcs or kg</label>
                                 <div class="col-md-7">
                                     <select id="statement" class="form-control" name="statement"  aria-label="Default select example">
@@ -47,39 +46,37 @@
                                     </select>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+
+                            <div class="form-group row mt-3">
                                 <label for="amount" class="col-md-4 col-form-label text-md-right">Amount</label>
                                 <div class="col-md-7">
                                     <input id="amount" class="form-control" type="text" name="amount" value="{{$product->amount}}"
                                            required/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+
+                            <div class="form-group row mt-3">
                                 <label for="price" class="col-md-4 col-form-label text-md-right">Price</label>
                                 <div class="col-md-7">
                                     <input id="price" class="form-control" type="text" name="price" value="{{$product->price}}"
                                            required/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+
+                            <div class="form-group row mt-3">
                                 <label for="manufacturer_id" class="col-md-4 col-form-label text-md-right">manufacturer_id</label>
                                 <div class="col-md-7">
                                     <input id="manufacturer_id" class="form-control" type="text" name="manufacturer_id" value="{{$product->manufacturer_id}}"
                                            required/>
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
                                 <div class="col-md-7">
                                     <input id="image" name="image" type="file" class="form-control" value="{{asset('storage/' . $product->image)}}">
                                 </div>
                             </div>
-                            <br>
-                            <div class="form-group row">
+                            <div class="form-group row mt-3">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-7">
                                     <button class="btn btn-primary" type="submit">Update</button>
